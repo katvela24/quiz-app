@@ -9,9 +9,18 @@
 </head>
 
 <body>
-    <div>Time: <span id="timer"></span></div>
+    <div id="timerdiv">
+        <span id="view-score"> View High Scores
+        </span>
+        <span id="timer"></span>
+    </div>
     <section id="startscreen">
-        <P> Instructions</P>
+        <h1> Coding Quiz </h1>
+        <p id="paragraph-style">
+            This Quiz App is a timed coding quiz built with<br>
+            <br> HTML and CSS, powered by JavaScript code  <br>
+             <br>and runs in the browser.
+        </p>
         <button id="startbutton">StartQuiz</button>
 
     </section>
@@ -28,7 +37,7 @@
 
     <div id="end-screen" class="hide">
         <h2>You’re Done.</h2>
-        <p>Your final score is <span id="final-score"></span>.</p>
+        <p></p><span id="final-score"></span>.</p>
         <p>
             Enter initials: <input type="text" id="initials" max="3" />
             <button id="submit">Submit</button>
@@ -40,11 +49,14 @@
         <h2>High Score.</h2>
         <ol>
             <li>
-                <span id="initials"></span>
-                <span id="score"></span>
+                <span id="initials-display"></span>
+                <span id="score-display"></span>
 
             </li>
         </ol>
+        <button id="go-back">
+            Go back
+        </button>
     </div>
 
     <script src="assets/js/script.js"></script>

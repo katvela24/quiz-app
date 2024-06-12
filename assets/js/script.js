@@ -5,42 +5,43 @@ var endscreenEl = document.getElementById("end-screen")
 var questionEl = document.getElementById("question")
 var answersEl = document.getElementById("answers")
 var highscoreEl = document.getElementById("high-score")
+var highscoreviewEl = document.getElementById("view-score")
 
 var questionindex = 0
 var score = 0
 var numSeconds = 60;
 var timerEl = document.getElementById("timer")
-let interval;
+var interval;
 
 var questions = [
 
     {
         question: "What is the ideal data structure for storing a list of items?",
-        answers: ["variable", "function", "array", "ids"],
-        correctanswer: "array"
+        answers: ["1. Variable", "2. Function", "3. Array", "4. Ids"],
+        correctanswer: "3. Array"
     },
     {
-        question: "In Javascript, what character key ends a statement?",
-        answers: ["period", "semicolon", "comma", "question mark"],
-        correctanswer: "semicolon"
+        question: "2. In Javascript, what character key ends a statement?",
+        answers: ["1. Period", "2. Semicolon", "3. Comma", "4. Question mark"],
+        correctanswer: "2. Semicolon"
     },
     {
-        question: "What keyword stores data values?",
-        answers: ["variable", "function", "array", "ids"],
-        correctanswer: "variable"
-    },
-
-    {
-        question: "Which Javascript method outputs useful messages?",
-        answers: ["variable", "function", ".class", "console.log"],
-        correctanswer: "console.log"
-
+        question: "3. What keyword stores data values?",
+        answers: ["1. Variable", "2. Function", "3. Array", "4. Ids"],
+        correctanswer: "1. Variable"
     },
 
     {
-        question: "Which Javascript method waits for user interaction (e.g. a click of a button) before running the code?",
-        answers: ["event listener", "object", "DOM", "function"],
-        correctanswer: "event listener"
+        question: "4. Which Javascript method outputs useful messages?",
+        answers: ["1. Variable", "2. Function", "3. Class", "4. Console.log"],
+        correctanswer: "4. Console.log"
+
+    },
+
+    {
+        question: "5. Which Javascript method waits for user interaction (e.g. a click of a button) before running the code?",
+        answers: ["1. Event listener", "2. Object", "3. DOM", "4. Function"],
+        correctanswer: "1. Event listener"
     }
 ]
 
@@ -66,12 +67,13 @@ function startGame() {
 // asks an individual question
 function askquestion() {
     var currentQuestion = questions[questionindex]
+
     var currentAnswers = currentQuestion.answers
     questionEl.innerText = currentQuestion.question
     questionEl.setAttribute("data-index", questionindex)
     // when a question is asked, throws away the previous question's answers before outputting the new question's answers
     answersEl.innerText = ""
-
+    console.log(currentAnswers.length);
     for (var i = 0; i < currentAnswers.length; i++) {
 
         var button = document.createElement("button")
@@ -82,6 +84,7 @@ function askquestion() {
         button.onclick = checkanswer
 
     }
+
     // questionindex++
 }
 function checkanswer() {
@@ -90,12 +93,15 @@ function checkanswer() {
 
     if (this.value === questions[questionindex].correctanswer) {
         console.log("correct!")
+        score = score + 10
     } else {
         console.log("incorrect")
         numSeconds = numSeconds - 10
-        timerEl.textContent = numSeconds
+        timerEl.textContent = "time: " + numSeconds
     }
     questionindex++
+    if (questionindex !== questionindex.length - 1)
+        clearInterval(interval);
     askquestions()
 }
 
@@ -107,23 +113,21 @@ function endGame() {
 }
 function askquestions() {
 
-    // kicks off the first question
-    askquestion();
-
 
     //   start an interval to then ask the rest of the questions at a delay
     interval = setInterval(function () {
         numSeconds = numSeconds - 1
-        timerEl.textContent = numSeconds
-        if (questionindex === questions.length) {
+        timerEl.textContent = "time: " + numSeconds
+        if (questionindex === questions.length || numSeconds <= 0) {
             clearInterval(interval)
-            timerEl.textContent = 0
+            timerEl.textContent = "time: " + 0
             return endGame();
             // alert ("done")
         }
-
     }, 1000)
 
+    // kicks off the first question
+    askquestion();
 
 }
 // Main process (where you call the first couple of functions)
@@ -135,13 +139,40 @@ document.getElementById("startbutton").addEventListener("click", function () {
     askquestions()
 })
 
-document.getElementById("submit").addEventListener("click", function () {
-    let initialsEL = document.getElementById("initials")
-    endscreenEl.setAttribute("class", "hide")
-    console.log("testing",initialsEL.value);
-    console.log("testing2",initialsEL.innerHTML);
+document.getElementById("view-score").addEventListener("click", function () {
+    if (endscreenEl.classList.contains("show")) {
+        endscreenEl.setAttribute("class", "hide")
+    }
+    else endscreenEl.setAttribute("class", "show")
     highscoreEl.setAttribute("class", "show")
 })
+
+// This is where we click submit for initials
+document.getElementById("submit").addEventListener("click", function () {
+    // testElement.classList.contains(className)
+    if (endscreenEl.classList.contains("show")) {
+        endscreenEl.setAttribute("class", "hide")
+    }
+    highscoreEl.setAttribute("class", "show")
+    let initialsEL = document.getElementById("initials")
+    let initialsDisplayEL = document.getElementById("initials-display")
+    let scoreDisplayEL = document.getElementById("score-display")
+
+    // console.log("initials", initialsEL);
+    // console.log("testing", initialsEL.value);
+    // console.log("ref", initialsDisplayEL);
+    // console.log("score", score);
+    initialsDisplayEL.innerHTML = initialsEL.value
+    scoreDisplayEL.innerHTML = score
+
+
+})
+
+document.getElementById("go-back").addEventListener("click", function () {
+    highscoreEl.setAttribute("class", "hide")
+    startscreenEl.setAttribute("class", "show");
+})
+
 
 function startGame() {
 
